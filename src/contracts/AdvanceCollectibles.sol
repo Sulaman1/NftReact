@@ -31,8 +31,11 @@ contract AdvanceCollectibles is ERC721, VRFConsumerBase {
 
     struct NFT {
         uint256 id;
+        string _uri;
         string nftUri;
-        string desc;
+        string name;
+        string bname;
+        string date;
         address author;
     }
 
@@ -91,13 +94,27 @@ contract AdvanceCollectibles is ERC721, VRFConsumerBase {
     }
 
     //Whenever to set TokenUri call this function...
-    function nftUpload(string memory _uri, string memory _desc) public {
+    function nftUpload(
+        string memory _uri,
+        string memory nftUri,
+        string memory name,
+        string memory bname,
+        string memory date
+    ) public {
         require(bytes(_uri).length > 0, "NFT Uri is not received");
 
-        nfts[nftCount] = NFT(nftCount, _uri, _desc, msg.sender);
+        nfts[nftCount] = NFT(
+            nftCount,
+            _uri,
+            nftUri,
+            name,
+            bname,
+            date,
+            msg.sender
+        );
         nftCount++;
 
-        emit nftUploadedEvent(nftCount, _uri, _desc, msg.sender);
+        emit nftUploadedEvent(nftCount, _uri, name, msg.sender);
     }
 
     /**

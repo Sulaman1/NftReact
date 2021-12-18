@@ -26,6 +26,7 @@ function App() {
   const [tokenC, setTokenC] = useState();
   const [nftC, setNftC] = useState();
   const [allNfts, setAllNfts] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [fileName, setFileName] = useState();
   const [fileHash, setFileHash] = useState("");
 
@@ -48,6 +49,17 @@ function App() {
   const [metadataUploaded, setMetadataUploaded] = useState(false);
   const [Acontract, setAcontract] = useState({});
   const [nftCreated, setNftCreated] = useState(true);
+
+  const styles = {
+    display: 'inline',
+    width: '305px',
+    height: 210,
+    float: 'left',
+    padding: 5,
+    border: '0.5px solid black',
+    marginBottom: 10,
+    marginRight: 10
+  }
 
   //Load Blockchain...
   useEffect(() => {
@@ -77,22 +89,25 @@ function App() {
         let fnft = await AdvanceContract.methods.nfts(i).call()
         console.log(fnft)
         let aut = fnft.author;
-        let des = fnft.desc;
+        let name = fnft.name;
         let id = fnft.id;
         let nfturi = fnft.nftUri;
-        let obj = { aut, des, id, nfturi }
+        let uri = fnft._uri;
+        let obj = { aut, name, id, nfturi, uri }
         const updateNfts = [
           ...allNfts,
           {
             author: aut,
-            desc: des,
+            name: name,
             id: id,
-            nftUri: nfturi
+            nftUri: nfturi,
+            uri: uri
           }
         ];
-        setAllNfts(updateNfts)
-      }
 
+        setAllNfts(allNfts => [...allNfts, obj])
+        setFilteredData(filteredData => [...filteredData, obj])
+      }
     }
     loadBlockchainData().then(() => {
       //loading false
@@ -172,6 +187,17 @@ function App() {
     setDate(e);
     console.log("date : ", date);
   }
+
+  const handleSearch = (event) => {
+    let value = event.target.value.toLowerCase();
+    let result = [];
+    console.log(value);
+    result = allNfts.filter((data) => {
+      return data.name.search(value) != -1;
+    });
+    setFilteredData(result);
+  }
+
 
 
   async function fundTokenfile() {
@@ -255,7 +281,7 @@ function App() {
       setMetadataUri(uri);
 
       console.log("UPDATING NFT UPLOADER IN CONTRACT...");
-      Acontract.methods.nftUpload(uri, name).send({ from: user })
+      Acontract.methods.nftUpload(uri, nftUri, name, bname, date).send({ from: user })
         .on("transactionHash", (hash) => {
           console.log("Tx After Setting in Contract: ", hash)
           if (hash) {
@@ -497,9 +523,48 @@ function App() {
       <p>Metadata Hash : {metadataHash}</p>
       <p>Metadata Uri : <a href={metadataUri}>{metadataUri}</a></p>
       <p>Num Of Tokens : {tokenC}</p>
-      {/* <p>All Nfts : { allNfts }</p> */}
+      {/* <p>All Nfts : {allNfts[3].}</p> */}
 
+
+      <div style={{ margin: '0 auto', marginTop: '10%' }}>
+        <label>Search:</label>
+        <input type="text" onChange={(event) => handleSearch(event)} />
+      </div>
+      {/* <div style={{ padding: 10 }}>
+        {filteredData.map((value, index) => {
+          return (
+            <div key={value.id}>
+              <div style={styles}>
+                {value.name}
+                <img src={value.nfturi}
+                  style={{ width: '300px' }}
+                />
+              </div>
+            </div>
+          )
+        })}
+      </div> */}
+
+      <div style={{ padding: 10 }}>
+        {filteredData.map((video, key) => {
+          return (
+            <div className="card mb-4 text-center bg-secondory mx-auto" style={styles}>
+              {/* bg-dark */}
+              <div className="card-title">
+                <p>{video.name}</p>
+              </div>
+              <div>
+                <img src={video.nfturi}
+                  style={{ width: '300px' }}
+                />
+
+              </div>
+            </div>
+          )
+        })}
+      </div>
     </div>
+
   );
 }
 
