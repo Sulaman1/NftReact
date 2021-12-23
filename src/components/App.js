@@ -12,10 +12,11 @@ import readJson from '../scripts/misc/filttest'
 import AdvanceABI from '../abis/AdvanceCollectibles.json';
 import LinkABI from '../abis/LinkTokenInterface.json';
 
+require("dotenv").config();
 const path = require("path");
 const Provider = require('@truffle/hdwallet-provider');
-const mnemonic = 'actual turtle provide away bamboo dad arrow devote knee mind cradle betray';
-const provider = new Provider(mnemonic, 'https://rinkeby.infura.io/v3/c5a0caa6b6bc4b9783e5ef0f055aa538');
+const mnemonic = process.env.REACT_APP_MNEMONICS;
+const provider = new Provider(mnemonic, process.env.REACT_APP_RINKEBY_URL);
 
 var ipfsAPI = require('ipfs-api')
 var ipfs = ipfsAPI({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });

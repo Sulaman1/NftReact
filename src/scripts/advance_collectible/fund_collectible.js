@@ -1,13 +1,17 @@
 import AdvanceABI from '../../abis/AdvanceCollectibles.json';
 import LinkABI from '../../abis/LinkTokenInterface.json';
+
+require("dotenv").config();
+
 const Web3 = require("web3")
 //const config = require("../../truffle-config.js");
 const fund = require("../helpful_scripts");
 
 const Provider = require('@truffle/hdwallet-provider');
-const priKey = 'b8ed812a73ca25905a534c4afc5b0f5ba2b387727cf73e4700fe843dcb7971b6';
-const mnemonic = 'actual turtle provide away bamboo dad arrow devote knee mind cradle betray';
-const provider = new Provider(mnemonic, 'https://rinkeby.infura.io/v3/c5a0caa6b6bc4b9783e5ef0f055aa538');
+const priKey = process.env.REACT_APP_PRI_KEY;
+const mnemonic = process.env.REACT_APP_MNEMONICS;
+console.log(priKey, mnemonic)
+const provider = new Provider(mnemonic, process.env.REACT_APP_RINKEBY_URL);
 
 
 //module.exports = async callback => {

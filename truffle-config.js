@@ -1,3 +1,4 @@
+require("dotenv").config();
 /**
  * Use this file to configure your truffle project. It's seeded with some
  * common settings for different networks and features like migrations,
@@ -19,11 +20,12 @@
  */
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
+
 const ropstenProvider = new HDWalletProvider({
   privateKeys: [
-    '5ead92c47efffdddf34c000761b68c3866f7d85131ed9208ba96331362634efa',
+    process.env.REACT_APP_PRI_KEY,
   ],
-  providerOrUrl: 'https://ropsten.infura.io/v3/59d7420ec6b34a128f884d1b36a5a064'
+  providerOrUrl: process.env.REACT_APP_ROPSTEN_URL
 });
 // const infuraKey = "fj4jll3k.....";
 //
@@ -49,9 +51,9 @@ module.exports = {
     // options below to some value.
     //
     development: {
-     host: "127.0.0.1",     // Localhost (default: none)
-     port: 8545,            // Standard Ethereum port (default: none)
-     network_id: "*",       // Any network (default: none)
+      host: "127.0.0.1",     // Localhost (default: none)
+      port: 8545,            // Standard Ethereum port (default: none)
+      network_id: "*",       // Any network (default: none)
     },
     // Another network with more advanced options...
     // advanced: {
@@ -67,34 +69,34 @@ module.exports = {
     kovan: {
       networkCheckTimeout: 30000,
       //timeoutBlocks: 200, 
-      provider: function(){
+      provider: function () {
         return new HDWalletProvider(
-          'actual turtle provide away bamboo dad arrow devote knee mind cradle betray',
-          'https://kovan.infura.io/v3/c5a0caa6b6bc4b9783e5ef0f055aa538'
+          process.env.REACT_APP_MNEMONICS,
+          process.env.REACT_APP_KOVAN_URL
         )
       },
-      vrf_coordinator : '0xdD3782915140c8f3b190B5D67eAc6dc5760C46E9',
-      link_token : '0xa36085F69e2889c224210F603D836748e7dC0088',
+      vrf_coordinator: '0xdD3782915140c8f3b190B5D67eAc6dc5760C46E9',
+      link_token: '0xa36085F69e2889c224210F603D836748e7dC0088',
       keyhash: '0x6c3699283bda56ad74f6b855546325b68d482e983852a7a82979cc4807b641f4',
-     
+
       network_id: 42
-      },
+    },
 
-      rinkeby: {
-        networkCheckTimeout: 30000,
-        provider: function(){
-          return new HDWalletProvider(
-            'actual turtle provide away bamboo dad arrow devote knee mind cradle betray',
-            'https://rinkeby.infura.io/v3/c5a0caa6b6bc4b9783e5ef0f055aa538'
-          )
-        },
-        vrf_coordinator : '0xb3dCcb4Cf7a26f6cf6B120Cf5A73875B7BBc655B',
-        link_token : '0x01be23585060835e02b77ef475b0cc51aa1e0709',
-        keyhash : '0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311',
-
-        network_id: 4,
-        skipDryRun: false,
+    rinkeby: {
+      networkCheckTimeout: 30000,
+      provider: function () {
+        return new HDWalletProvider(
+          process.env.REACT_APP_MNEMONICS,
+          process.env.REACT_APP_RINKEBY_URL
+        )
       },
+      vrf_coordinator: '0xb3dCcb4Cf7a26f6cf6B120Cf5A73875B7BBc655B',
+      link_token: '0x01be23585060835e02b77ef475b0cc51aa1e0709',
+      keyhash: '0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311',
+
+      network_id: 4,
+      skipDryRun: false,
+    },
 
     ropsten: {
       provider: () => ropstenProvider,
@@ -117,8 +119,8 @@ module.exports = {
     // timeout: 100000
   },
 
-  contracts_directory : './src/contracts/',
-  contracts_build_directory : './src/abis/',
+  contracts_directory: './src/contracts/',
+  contracts_build_directory: './src/abis/',
 
   // Configure your compilers
   compilers: {
